@@ -1,13 +1,17 @@
 package com.hawk.blindtestockbe.controller;
 
 import com.hawk.blindtestockbe.model.AiRequest;
+import com.hawk.blindtestockbe.model.StockRequest;
 import com.hawk.blindtestockbe.service.AiService;
+import com.hawk.blindtestockbe.service.StockService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
+import java.util.Map;
 
 @Slf4j
 @RestController
@@ -20,5 +24,13 @@ public class AiController {
         String aiMessage = aiService.send(aiRequest.message());
 
         return ResponseEntity.ok(aiMessage);
+    }
+
+    private final StockService stockService;
+
+    @GetMapping("/stock")
+    public Map<LocalDate, Double> getHistoricalStockPrices(
+            @RequestBody StockRequest stockRequest) {
+        return stockService.getHistoricalStockPrices(stockRequest);
     }
 }
